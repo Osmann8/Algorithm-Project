@@ -7,6 +7,7 @@ surname = input("Enter your surname: ")
 deficient_protein = int(input("Enter the deficient factor protein's number: "))
 while deficient_protein not in [8, 9]:
     deficient_protein = int(input("Enter the deficient factor protein's number: "))
+# Protein level in blood (%)
 deficient_factor_protein_level = float(input(f"Factor-{deficient_protein} level in blood: "))
 while deficient_factor_protein_level >= 50 and deficient_factor_protein_level < 0:
     deficient_factor_protein_level = float(input(f"Factor-{deficient_protein} level in blood: "))
@@ -50,13 +51,32 @@ if prophylaxis:
         factor_production_type = "Plasma-derived"
     else:
         factor_production_type = "Recombinant"
+        
     # Factor medication to use
     print(f"The factor medication to be used: factor-{deficient_protein}/{factor_production_type}")
+    # Medication period
     if deficient_protein == 8:
         print(f"3 times a week  to use the medication")
     else:
         print(f"2 times a week  to use the medication")
+        
+    # Minimum required dose of medication at one time  | %'yi mi hesaplıyoruz emin değilim
+    minimum_required_dose_percentage = 40 - deficient_factor_protein_level
+    if deficient_protein == 8:
+        if minimum_required_dose_percentage % 2 == 0:
+            minimum_dose_medication = (minimum_required_dose_percentage/2) * weight
+        else:
+            minimum_dose_medication = (minimum_required_dose_percentage+1)/2 * weight
+    else:
+        minimum_dose_medication = minimum_required_dose_percentage * weight
+    print(f"Minimum required dose of medication at one time is: %{minimum_dose_medication}")
+
+    # Amount of medication to be used at one time (IU), types and quantities of vials
     
+
+
+
+
 
 
 
