@@ -72,62 +72,60 @@ if prophylaxis:
     print(f"Minimum required dose of medication at one time is: %{minimum_dose_medication}")
 
     # Amount of medication to be used at one time (IU), types and quantities of vials
-
-    # name this a with apropriate name
-    a = minimum_dose_medication / 250
-    amount_of_total_medication = 0
-    dose_2000, dose_1500, dose_1000, dose_500, dose_250 = 0, 0, 0, 0, 0
-    while a > 0:
-        remaining_required_dose = minimum_dose_medication
-        vials_list = [250,500,1000,1500,2000]
-        a = minimum_dose_medication / 250
-        if a >= 2:
-            if a>=4:
-                if a>=6:
-                    if a>=8:
-                        minimum_dose_medication -= 2000
-                        dose_2000 += 1
-                        amount_of_total_medication += 2000
-                    else:
-                        minimum_dose_medication -= 1500
-                        dose_1500 += 1
-                        amount_of_total_medication += 1500
+    vial_sizes = [2000, 1500, 1000, 500, 250]
+    vials_used = []
+    for vial in vial_sizes:
+        count = minimum_dose_medication / vial
+        if int(count) > 0:
+            if vial == 250:
+                if count != int(count):
+                    minimum_dose_medication -= (int(count) + 1) * vial
+                    vials_used.append((vial, int(count) + 1))
                 else:
-                    minimum_dose_medication -= 1000
-                    dose_1000 += 1
-                    amount_of_total_medication += 1000
+                    vials_used.append((vial, int(count)))
+                    minimum_dose_medication -= int(count) * vial
             else:
-                minimum_dose_medication -= 500
-                dose_500 +=1
-                amount_of_total_medication += 500
-        elif a > 0 and a < 2:
-            minimum_dose_medication -= 250
-            amount_of_total_medication += 250
-            dose_250 += 1
-    print(f"Amount of medication to be used: {amount_of_total_medication}\n")
-    if dose_250 > 0:
-        print(f"{dose_250} vial of 250 ", end="")
-        if dose_1000 or dose_500 or dose_2000 or dose_1500:
-            print(",", end="")
-    if dose_500 >0:
-        print(f"{dose_500} vial of 500 ", end="")
-        if dose_1000 or dose_2000 or dose_1500:
-            print(",", end="")
-    if dose_1000 > 0:
-        print(f"{dose_1000} vial of 1000 ", end="")
-        if dose_2000 or dose_1500:
-            print(",", end="")
-    if dose_1500 > 0:
-        print(f"{dose_1500} vial of 1500 ", end="")
-        if dose_2000 :
-            print(",", end="")
-    if dose_2000 > 0:
-        print(f"{dose_2000} vial of 2000 ", end="")
+                vials_used.append((vial, int(count)))
+                minimum_dose_medication -= int(count) * vial
+    total_amount_medication = sum([vial * count for vial, count in vials_used])
+    print(f"Amount of medication to be used at one time:{total_amount_medication}\n"
+          f"Used vial types and quantities: ")
+    for vial, count in vials_used:
+        print(f"{count} vial of {vial}")
 
-    # Total amount of medication for 4 weeks, types and amounts of vials
-    total_amount_medication_for_month = 0
+    # Total amount of medication for 4 weeks, types and quantities of vials
+    total_medication_for_month = 0
     if deficient_protein == 8:
-        total_amount_medication_for_month = amount_of_total_medication * 12
+        total_medication_for_month += total_amount_medication * 12
+        print(f"Total amount for 4 weeks: {total_medication_for_month}.\n"
+              f"Used vials and quantities:")
+        for vial, count in vials_used:
+            print(f"{count*12} vial of {vial}")
+
+    elif deficient_protein == 9:
+        total_medication_for_month += total_amount_medication * 8
+        print(f"Total amount for 4 weeks: {total_medication_for_month}.\n"
+              f"Used vials and quantities:")
+        for vial, count in vials_used:
+            print(f"{count * 8} vial of {vial}")
+
+    # Total medication cost for 4 weeks
+    if factor_production_type in ["P","p"]:
+        total_medication_cost = total_medication_for_month * 0.3
+        print(f"Total medication cost for 4 weeks: {total_medication_cost}")
+    elif factor_production_type in ["R","r"]:
+        total_medication_cost = total_medication_for_month * 0.4
+        print(f"Total medication cost for 4 weeks: {total_medication_cost}")
+
+
+
+
+
+
+
+
+
+
 
 
 
