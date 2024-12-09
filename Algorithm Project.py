@@ -5,8 +5,8 @@ total_patient = 0
 number_of_hemo_A, number_of_hemo_B = 0, 0
 number_of_severity_severe, number_of_severity_moderate, number_of_severity_mild  = 0, 0, 0
 number_of_inhibitors_present_hemo_A, number_of_inhibitors_present_hemo_B = 0, 0
-
-
+number_of_patients_receiving_prophylaxis_A, number_of_patients_receiving_prophylaxis_B = 0, 0
+number_of_prophylaxis_with_severity_moderate = 0
 
 while next_patient:
     # Get personel informations
@@ -59,6 +59,8 @@ while next_patient:
         while factor_production_type not in ["P","p","R","r"]:
             factor_production_type = input("Enter (P/p/R/r) for the production type of factor"
                                            " medication to be used (Plasma-derived/Recombinant): ")
+        if severity == "moderate":
+            prophylaxis_with_severity_moderate += 1
         prophylaxis = True
 
     print(f"ID: {ID} \nName:{name} \nSurname:{surname}")
@@ -79,12 +81,15 @@ while next_patient:
         # Medication period
         if deficient_protein == 8:
             print(f"3 times a week  to use the medication")
+            number_of_patients_receiving_prophylaxis_A += 1
         else:
             print(f"2 times a week  to use the medication")
+            number_of_patients_receiving_prophylaxis_B += 1
 
         # Minimum required dose of medication at one time  | %'yi mi hesaplıyoruz emin değilim
         minimum_required_dose_percentage = 40 - deficient_factor_protein_level
         if deficient_protein == 8:
+
             if minimum_required_dose_percentage % 2 == 0:
                 minimum_dose_medication = (minimum_required_dose_percentage/2) * weight
             else:
@@ -160,15 +165,46 @@ print(f"Number of Hemophilia-A: {number_of_hemo_A}\nNumber of Hemophilia-B: {num
 percentage_of_severe_patients = number_of_severity_severe * 100 / total_patient
 percentage_of_moderate_patients = number_of_severity_moderate * 100 / total_patient
 percentage_of_mild_patients = number_of_severity_mild * 100 / total_patient
-print(f"Number of patients with severe hemophilia: {number_of_severity_severe} and percentage: {percentage_of_severe_patients}")
-print(f"Number of patients with moderate hemophilia: {number_of_severity_moderate} and percentage: {percentage_of_moderate_patients}")
-print(f"Number of patients with severe hemophilia: {number_of_severity_mild} and percentage: {percentage_of_mild_patients}")
+print(f"Number of patients with severe hemophilia: {number_of_severity_severe} and percentage: {percentage_of_severe_patients}%")
+print(f"Number of patients with moderate hemophilia: {number_of_severity_moderate} and percentage: {percentage_of_moderate_patients}%")
+print(f"Number of patients with severe hemophilia: {number_of_severity_mild} and percentage: {percentage_of_mild_patients}%")
 
 # Percentages of inhibitor presence in Hemophilia-A and Hemophilia-B patients individually
 inhib_presence_A_percentage = number_of_inhibitors_present_hemo_A * 100 / number_of_hemo_A
 inhib_presence_B_percentage = number_of_inhibitors_present_hemo_B * 100 / number_of_hemo_B
 print(f"Percentage of inhibitor presence in Hemophilia-A: {inhib_presence_A_percentage}")
 print(f"Percentage of inhibitor presence in Hemophilia-B: {inhib_presence_B_percentage}")
+
+# Numbers and percentages of patients receiving prophylaxis for Hemophilia-A and Hemophilia-B individually
+# find out if it's asking for total percentage or hemophilia's inself
+percentage_of_patients_receiving_prophylaxis_A = number_of_patients_receiving_prophylaxis_A * 100 / number_of_hemo_A
+percentage_of_patients_receiving_prophylaxis_B = number_of_patients_receiving_prophylaxis_B * 100 / number_of_hemo_B
+print(f"Number of Hemophlia-A patients receiving prophylaxis: {number_of_patients_receiving_prophylaxis_A}, Percentage: {}% ")
+
+#  The percentage of patients receiving prophylaxis among hemophilia patients whose disease severity is moderate
+percentage_of_moderate_patients_in_prophylaxis = number_of_prophylaxis_with_severity_moderate * 100 / (number_of_patients_receiving_prophylaxis_A + number_of_patients_receiving_prophylaxis_B)
+print(f"Percentage of patients receiving prophylaxis with severity of moderate: {percentage_of_moderate_patients_in_prophylaxis}%")
+
+#  Percentages of patients using plasma-derived and recombinant factor medications among
+#  Hemophilia-A and Hemophilia-B patients receiving prophylaxis individual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
