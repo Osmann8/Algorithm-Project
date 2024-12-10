@@ -28,7 +28,7 @@ while next_patient:
 
 
     number_of_antibody = float(input("The amount of antibody in blood produced against factor medication (BU): "))
-    if number_of_antibody < 0:
+    while number_of_antibody < 0:
         number_of_antibody = float(input("The amount of antibody in blood produced against factor medication (BU): "))
     if number_of_antibody > 0:
         if deficient_protein == 8:
@@ -50,13 +50,15 @@ while next_patient:
     if severity == "moderate":
         #number of bleeding in the past year
         number_of_bleeding = int(input("Enter the number of bleeding average per month in the past year: "))
-        if number_of_bleeding < 0:
+        while number_of_bleeding < 0:
             number_of_bleeding = int(input("Enter the number of bleeding in the past year: "))
     # Patients that will be included in prophylaxis program
     prophylaxis = False
     if (severity == "severe" and number_of_antibody == 0) or (severity == "moderate" and number_of_bleeding >= 3):
         print("-->The patient will be included in prophylaxis.")
         weight = float(input("Enter the patient's weight: "))
+        while weight < 0:
+            float(input("Enter the patient's weight: "))
         factor_production_type = input("Enter (P/p/R/r) for the production type of factor"
                                        " medication to be used (Plasma-derived/Recombinant): ")
         while factor_production_type not in ["P","p","R","r"]:
@@ -78,6 +80,7 @@ while next_patient:
             factor_production_type = "Plasma-derived"
         else:
             factor_production_type = "Recombinant"
+        print("Prophylaxis will be applied. And here are the informations:")
 
         # Factor medication to use
         print(f"The factor medication to be used: factor-{deficient_protein}/{factor_production_type}")
@@ -92,13 +95,11 @@ while next_patient:
         # Minimum required dose of medication at one time  | %'yi mi hesaplıyoruz emin değilim
         minimum_required_dose_percentage = 40 - deficient_factor_protein_level
         if deficient_protein == 8:
-
-            if minimum_required_dose_percentage % 2 == 0:
-                minimum_dose_medication = (minimum_required_dose_percentage/2) * weight
-            else:
-                minimum_dose_medication = (minimum_required_dose_percentage+1)/2 * weight
+            minimum_dose_medication = (minimum_required_dose_percentage/2) * weight
         else:
             minimum_dose_medication = minimum_required_dose_percentage * weight
+
+        minimum_dose_medication = round(minimum_dose_medication, 2)
         print(f"Minimum required dose of medication at one time is: {minimum_dose_medication}")
 
         # Amount of medication to be used at one time (IU), types and quantities of vials
@@ -193,11 +194,11 @@ while next_patient:
 
         # Total medication cost for 4 weeks
         if factor_production_type == "Plasma-derived":
-            total_medication_cost = total_medication_for_month * 0.3
-            print(f"Total medication cost for 4 weeks: {total_medication_cost}$")
+            total_medication_cost_one_month = total_medication_for_month * 0.3
+            print(f"Total medication cost for 4 weeks: {total_medication_cost_one_month}$")
         elif factor_production_type == "Recombinant":
-            total_medication_cost = total_medication_for_month * 0.4
-            print(f"Total medication cost for 4 weeks: {total_medication_cost}$")
+            total_medication_cost_one_month = total_medication_for_month * 0.4
+            print(f"Total medication cost for 4 weeks: {total_medication_cost_one_month}$")
     else:
         print("Prophylaxis won't be provided")
 
@@ -226,8 +227,8 @@ print(f"Number of patients with severe hemophilia: {number_of_severity_mild} and
 
 # Percentages of inhibitor presence in Hemophilia-A and Hemophilia-B patients individually
 inhib_presence_A_percentage = number_of_inhibitors_present_hemo_A * 100 / number_of_hemo_A
-inhib_presence_B_percentage = number_of_inhibitors_present_hemo_B * 100 / number_of_hemo_B
 print(f"Percentage of inhibitor presence in Hemophilia-A: {inhib_presence_A_percentage}")
+inhib_presence_B_percentage = number_of_inhibitors_present_hemo_B * 100 / number_of_hemo_B
 print(f"Percentage of inhibitor presence in Hemophilia-B: {inhib_presence_B_percentage}")
 
 # Numbers and percentages of patients receiving prophylaxis for Hemophilia-A and Hemophilia-B individually
