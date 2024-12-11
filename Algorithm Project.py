@@ -9,6 +9,9 @@ number_of_inhibitors_present_hemo_A, number_of_inhibitors_present_hemo_B = 0, 0
 number_of_patients_receiving_prophylaxis_A, number_of_patients_receiving_prophylaxis_B = 0, 0
 # Moderate olarak prophylaxis'e girmiş olanların sayısı
 number_of_prophylaxis_with_severity_moderate = 0
+total_medication_amount = 0
+highest_four_weeks_medication_amount = 0
+highest_four_weeks_medication_cost = 0
 
 while next_patient:
     # Get personel informations
@@ -159,10 +162,17 @@ while next_patient:
             print(f"{dose_2000} vial of 2000 IU")
 
         # Total amount of medication for 4 weeks, types and quantities of vials
-        total_medication_for_month = 0
+        total_medication_amount_for_month = 0
+
+
+
+
+
+
         if deficient_protein == 8:
-            total_medication_for_month += amount_of_total_medication * 12
-            print(f"Total amount for 4 weeks: {total_medication_for_month} IU\n"
+            total_medication_amount_for_month += amount_of_total_medication * 12
+            total_medication_amount += total_medication_amount_for_month * 12
+            print(f"Total amount for 4 weeks: {total_medication_amount_for_month} IU\n"
                   f"Used vials and quantities: ",end="" )
             # Bu işte bi yanlışlık var gibi ama :
             if dose_250 > 0:
@@ -178,8 +188,9 @@ while next_patient:
 
 
         elif deficient_protein == 9:
-            total_medication_for_month += amount_of_total_medication * 8
-            print(f"Total amount for 4 weeks: {total_medication_for_month} IU\n"
+            total_medication_amount_for_month += amount_of_total_medication * 8
+            total_medication_amount += total_medication_amount_for_month * 12
+            print(f"Total amount for 4 weeks: {total_medication_amount_for_month} IU\n"
                   f"Used vials and quantities:")
             if dose_250 > 0:
                 print(f"{dose_250} vial of 250 IU")
@@ -194,11 +205,48 @@ while next_patient:
 
         # Total medication cost for 4 weeks
         if factor_production_type == "Plasma-derived":
-            total_medication_cost_one_month = total_medication_for_month * 0.3
-            print(f"Total medication cost for 4 weeks: {total_medication_cost_one_month}$")
+            total_medication_cost_four_weeks = total_medication_amount_for_month * 0.3
+            print(f"Total medication cost for 4 weeks: {total_medication_cost_four_weeks}$")
         elif factor_production_type == "Recombinant":
-            total_medication_cost_one_month = total_medication_for_month * 0.4
-            print(f"Total medication cost for 4 weeks: {total_medication_cost_one_month}$")
+            total_medication_cost_four_weeks = total_medication_amount_for_month * 0.4
+            print(f"Total medication cost for 4 weeks: {total_medication_cost_four_weeks}$")
+
+        if deficient_protein == 8:
+            if total_medication_amount_for_month > highest_four_weeks_medication_amount:
+                highest_four_weeks_medication_amount = total_medication_amount_for_month
+                print_informations_for_highest_medication_amount_for_month_patient_hemophilia_A = f"""
+                Patient with the highest 4-weeks medication amount for Hemophilia-A informations:
+                ID: {ID}, Name: {name}, Surname: {surname}, Severity: {severity}, Weight: {weight}, Production Type: {factor_production_type}
+            4 weeks total medication amount: {total_medication_amount_for_month}
+            4 weeks total medication cost : {total_medication_cost_four_weeks}"""
+
+
+        elif deficient_protein == 9:
+            if total_medication_amount_for_month > highest_four_weeks_medication_amount:
+                highest_four_weeks_medication_amount = total_medication_amount_for_month
+                print_informations_for_highest_medication_amount_for_month_patient_hemophilia_B = f"""
+                Patient with the highest 4-weeks medication amount for Hemophilia-B informations:
+                ID: {ID}, Name: {name}, Surname: {surname}, Severity: {severity}, Weight: {weight}, Production Type: {factor_production_type}
+            4 weeks total medication amount: {total_medication_amount_for_month}
+            4 weeks total medication cost : {total_medication_cost_four_weeks}"""
+
+
+        if total_medication_cost_four_weeks > highest_four_weeks_medication_cost:
+            if deficient_protein == 8:
+                disease_type = "Hemophilia-A"
+            else:
+                disease_type = "Hemophilia-B"
+
+            highest_four_weeks_medication_cost = total_medication_cost_four_weeks
+            print_informations_for_patient_with_highest_medication_cost_for_month = f"""
+            Patient with the highest 4-weeks medication cost informations:
+            ID: {ID}, Name: {name}, Surname: {surname}, type: {disease_type},Severity: {severity}, Weight: {weight}, Production Type: {factor_production_type}
+        4 weeks total medication amount: {total_medication_amount_for_month}
+        4 weeks total medication cost : {total_medication_cost_four_weeks}"""
+
+
+
+
     else:
         print("Prophylaxis won't be provided")
 
@@ -236,15 +284,41 @@ print(f"Percentage of inhibitor presence in Hemophilia-B: {inhib_presence_B_perc
 percentage_of_patients_receiving_prophylaxis_A = number_of_patients_receiving_prophylaxis_A * 100 / number_of_hemo_A
 percentage_of_patients_receiving_prophylaxis_B = number_of_patients_receiving_prophylaxis_B * 100 / number_of_hemo_B
 print(f"Number of Hemophlia-A patients receiving prophylaxis: {number_of_patients_receiving_prophylaxis_A}, Percentage: {percentage_of_patients_receiving_prophylaxis_A}% ")
+print(f"Number of Hemophlia-A patients receiving prophylaxis: {number_of_patients_receiving_prophylaxis_A}, Percentage: {percentage_of_patients_receiving_prophylaxis_B}% ")
 
 #  The percentage of patients receiving prophylaxis among hemophilia patients whose disease severity is moderate
-percentage_of_moderate_patients_in_prophylaxis = number_of_prophylaxis_with_severity_moderate * 100 / (number_of_patients_receiving_prophylaxis_A + number_of_patients_receiving_prophylaxis_B)
+percentage_of_moderate_patients_in_prophylaxis = number_of_prophylaxis_with_severity_moderate * 100 / total_patient
 print(f"Percentage of patients receiving prophylaxis with severity of moderate: {percentage_of_moderate_patients_in_prophylaxis}%")
 
 #  Percentages of patients using plasma-derived and recombinant factor medications among
 #  Hemophilia-A and Hemophilia-B patients receiving prophylaxis individual
 
 
+
+
+# Total plasma-derived and recombinant factor-8 and factor-9 medication amounts (IU),
+# types and quantities of vials to be sent to all patients for 4-weeks prophylaxis
+
+
+
+# 4-weeks and 1-year factor medication costs ($) for prophylaxis covered by the SSI
+total_medication_cost_for_year = total_medication_cost_four_weeks * 12
+print(f"Total cost for 4 weeks : {total_medication_cost_four_weeks} and total cost for 1 year: {total_medication_cost_for_year}")
+
+# Average annual total medication amount (IU) and cost ($) per patient for prophylaxis covered by the SSI
+number_of_patients_receveing_prophylaxis = number_of_patients_receiving_prophylaxis_B + number_of_patients_receiving_prophylaxis_A
+print(f"Average annual total medication amount: {total_medication_amount/number_of_patients_receveing_prophylaxis},"
+      f" average cost: {total_medication_cost_for_year/number_of_patients_receveing_prophylaxis}")
+
+# TR identification numbers, names and surnames, disease severities, weights, production
+# types of medications used (plasma-derived/recombinant), 4-weeks total medication
+# amounts (IU) and costs ($) of patients with the highest 4-weeks medication amount for
+# Hemophilia-A and Hemophilia-B individually
+print(print_informations_for_highest_medication_amount_for_month_patient_hemophilia_A)
+print(print_informations_for_highest_medication_amount_for_month_patient_hemophilia_B)
+
+# Last question
+print(print_informations_for_patient_with_highest_medication_cost_for_month)
 
 
 
